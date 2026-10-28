@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,700;0,9..144,900;1,9..144,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import 'tailwindcss';
+
+/* ─── Keyframes ─────────────────────────────────────────── */
+@keyframes tileDropIn {
+  0%   { transform: translateY(-80px) rotate(-8deg) scale(0.8); opacity: 0; }
+  60%  { transform: translateY(6px) rotate(2deg) scale(1.04); opacity: 1; }
+  80%  { transform: translateY(-3px) rotate(-1deg); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+}
+@keyframes fadeUp {
+  from { transform: translateY(32px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(60px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-60px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes shimmerLine {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes tileCelebrate {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-10px) rotate(-4deg); }
+  75%      { transform: translateY(-6px) rotate(4deg); }
+}
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,160,23,.5); }
+  50%       { box-shadow: 0 0 0 14px rgba(212,160,23,0); }
+}
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes boardGridPulse {
+  0%,100% { opacity: .06; }
+  50%      { opacity: .12; }
+}
+
+/* ─── Tokens ────────────────────────────────────────────── */
+:root {
+  --bg:       #141210;
+  --surface:  #1c1814;
+  --surface2: #231f1a;
+  --wood:     #8b5e3c;
+  --tile-bg:  #f5e6c8;
+  --tile-shadow: #c5a97d;
+  --gold:     #d4a017;
+  --gold-lt:  #f0c84a;
+  --gold-dim: rgba(212,160,23,.15);
+  --cream:    #f0ead8;
+  --muted:    #8a7d6a;
+  --border:   rgba(212,160,23,.18);
+  --green:    #4a7c59;
+  --radius:   3px;
+  --font-display: 'Fraunces', serif;
+  --font-body:    'Inter', sans-serif;
+}
+
+/* ─── Base ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+
+@media (hover: none) {
+  body { cursor: auto; }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(212,160,23,.25); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212,160,23,.5); }
+
+/* ─── Tile ──────────────────────────────────────────────── */
+.scrabble-tile {
+  background: var(--tile-bg);
+  color: #2d2418;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 var(--tile-shadow), 0 4px 8px rgba(0,0,0,.4);
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 900;
+  user-select: none;
+}
+.scrabble-tile .tile-value {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 0.45em;
+  font-weight: 600;
+  color: #5a4020;
+  font-family: var(--font-body);
+}
+
+/* ─── Hero tile animation ───────────────────────────────── */
+.hero-tile {
+  opacity: 0;
+}
+.hero-tile.animate {
+  animation: tileDropIn .6s cubic-bezier(.22,.68,0,1.2) forwards;
+}
+.hero-tile.celebrate {
+  animation: tileCelebrate .5s ease-in-out infinite;
+}
+
+/* ─── Scroll reveal ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* ─── Board grid decoration ─────────────────────────────── */
+.board-grid-bg {
+  background-image:
+    linear-gradient(rgba(212,160,23,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,160,23,.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── Nav link underline ────────────────────────────────── */
+.nav-link {
+  position: relative;
+  color: var(--muted);
+  font-size: .8rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: color .3s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease;
+}
+.nav-link:hover, .nav-link.active { color: var(--cream); }
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+/* ─── Achievement card ──────────────────────────────────── */
+.achievement-card {
+  transition: transform .35s ease, border-color .35s ease;
+}
+.achievement-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,160,23,.5) !important;
+}
+
+/* ─── Gold shimmer text ─────────────────────────────────── */
+.gold-shimmer {
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-lt) 40%, var(--gold) 60%, var(--gold-lt) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmerLine 3s linear infinite;
+}
+
+/* ─── Gallery ───────────────────────────────────────────── */
+.gallery-item { overflow: hidden; }
+.gallery-item img { transition: transform .6s ease; }
+.gallery-item:hover img { transform: scale(1.06); }
+.gallery-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(20,18,16,.9) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+
+/* ─── Custom cursor ─────────────────────────────────────── */
+.cursor-dot {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transition: transform .15s ease, width .3s ease, height .3s ease, background .3s ease;
+}
+
+/* ─── Responsive utilities ──────────────────────────────── */
+
+/* Prevent overflow on small viewports */
+section, footer { overflow-x: hidden; }
+
+/* Tile rack wraps gracefully on narrow screens */
+.rack-wrap { flex-wrap: wrap; justify-content: center; }
+
+/* Achievement card mobile adjustments */
+@media (max-width: 640px) {
+  .achievement-card { flex-wrap: wrap; gap: .5rem; }
+  .achievement-card .result-badge { margin-left: auto; }
+}
+
+/* Extra-small viewport (< 375px) */
+@media (max-width: 374px) {
+  .scrabble-tile { font-size: .75rem !important; }
+}
+
+/* ─── Reduced motion ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
